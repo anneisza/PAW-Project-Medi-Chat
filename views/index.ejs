@@ -1,0 +1,238 @@
+<%- include('partials/head', { judul: judul }) %>
+
+<body class="bg-kabut text-tinta font-sans antialiased">
+
+  <!-- NAVBAR -->
+  <header class="bg-white border-b border-mint shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+
+      <a href="/" class="text-2xl font-extrabold text-medis">
+        ✚ MediChat
+        <span class="block text-xs font-normal text-abu">
+          Puskesmas Sehat
+        </span>
+      </a>
+
+      <nav class="flex flex-wrap justify-center gap-6 text-sm font-semibold text-tinta">
+        <a href="#layanan" class="hover:text-medis transition">Jadwal & Tarif</a>
+        <a href="/api/produk" class="hover:text-medis transition">API Layanan</a>
+        <a href="/api/status" class="hover:text-medis transition">API Status</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <main>
+
+    <!-- HERO SECTION -->
+    <section class="bg-kabut px-6 pt-20 pb-16">
+
+      <div class="max-w-4xl mx-auto text-center">
+
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-medis leading-tight tracking-tight">
+          Teman Sehat Anda,
+          <span class="block">Selangkah Lebih Dekat!</span>
+        </h1>
+
+        <p class="mt-7 text-base sm:text-lg text-abu leading-relaxed max-w-3xl mx-auto">
+          Bingung mencari informasi kesehatan atau layanan medis?
+          MediChat hadir membantu Anda mendapatkan informasi,
+          panduan kesehatan awal, dan mengenal berbagai layanan
+          Puskesmas dengan mudah, cepat, dan praktis.
+        </p>
+
+        <a href="#layanan"
+          class="inline-block mt-8 bg-medis text-white font-semibold rounded-lg px-8 py-4 hover:bg-tinta transition shadow-md">
+          Jelajahi Layanan →
+        </a>
+
+      </div>
+
+
+      <!-- STATUS API -->
+      <div class="max-w-2xl mx-auto mt-14">
+
+        <div class="bg-medis text-white rounded-xl p-6 sm:p-8 font-mono text-sm shadow-lg">
+
+          <div class="flex items-center justify-between mb-5 gap-3 flex-wrap">
+
+            <span class="font-semibold">
+              GET /api/status
+            </span>
+
+            <span class="flex items-center gap-2">
+
+              <span id="status-dot"
+                class="h-2.5 w-2.5 rounded-full bg-white/40">
+              </span>
+
+              <span id="status-label">
+                Menghubungi server
+              </span>
+
+            </span>
+
+          </div>
+
+          <pre id="status-output"
+            class="whitespace-pre-wrap break-words text-green-200 min-h-[8rem]">...</pre>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- DAFTAR LAYANAN -->
+    <section id="layanan" class="max-w-6xl mx-auto px-6 py-16 scroll-mt-6">
+
+      <div class="text-center mb-10">
+
+        <span class="text-sm font-bold uppercase tracking-widest text-medis">
+          Informasi Puskesmas
+        </span>
+
+        <h2 class="text-3xl sm:text-4xl font-bold text-medis mt-3 tracking-tight">
+          Jadwal Layanan & Biaya Rawat Jalan
+        </h2>
+
+        <p class="mt-4 text-abu max-w-2xl mx-auto leading-relaxed">
+          Temukan informasi jadwal pelayanan dan biaya pemeriksaan
+          kesehatan di Puskesmas Sehat. Kami hadir untuk membantu
+          Anda mendapatkan pelayanan kesehatan dengan mudah.
+        </p>
+
+      </div>
+
+
+      <!-- KARTU LAYANAN -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <% if (produk && produk.length > 0) { %>
+
+          <% produk.forEach(function(p) { %>
+
+            <article class="bg-white rounded-xl border border-mint p-6 shadow-sm hover:shadow-md transition">
+
+              <span class="inline-block text-xs font-bold uppercase tracking-wide bg-mint text-medis px-3 py-2 rounded-full">
+                <%= p.kategori %>
+              </span>
+
+              <h3 class="text-lg font-bold text-tinta mt-4">
+                <%= p.nama %>
+              </h3>
+
+              <div class="mt-4 space-y-3 text-sm text-abu">
+
+                <p>
+                  <span class="font-semibold text-tinta">📅 Hari:</span>
+                  <br>
+                  <%= p.jadwal %>
+                </p>
+
+                <p>
+                  <span class="font-semibold text-tinta">🕒 Jam:</span>
+                  <br>
+                  <%= p.jam %>
+                </p>
+
+              </div>
+
+              <div class="border-t border-mint mt-5 pt-4">
+
+                <p class="text-xs text-abu uppercase font-semibold">
+                  Biaya Layanan
+                </p>
+
+                <p class="text-2xl font-extrabold text-medis mt-1">
+                  <%= formatRupiah(p.harga) %>
+                </p>
+
+              </div>
+
+            </article>
+
+          <% }); %>
+
+        <% } else { %>
+
+          <div class="sm:col-span-2 lg:col-span-3 bg-white rounded-xl border border-mint p-8 text-center">
+
+            <p class="font-semibold text-tinta">
+              Belum ada data layanan tersedia.
+            </p>
+
+          </div>
+
+        <% } %>
+
+      </div>
+
+
+      <!-- INFORMASI PENTING -->
+      <div class="mt-10 p-6 rounded-xl bg-mint border border-medis/10">
+
+        <h3 class="font-bold text-lg text-medis">
+          Informasi Penting
+        </h3>
+
+        <p class="text-sm text-tinta/80 mt-2 leading-relaxed">
+          Jadwal dan tarif yang ditampilkan merupakan informasi
+          layanan pada aplikasi. Untuk memastikan jadwal dokter
+          dan biaya terbaru, silakan konfirmasi langsung kepada
+          pihak Puskesmas.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- SCRIPT STATUS API -->
+  <script>
+    (async function () {
+
+      const output = document.getElementById('status-output');
+      const label = document.getElementById('status-label');
+      const dot = document.getElementById('status-dot');
+
+      try {
+
+        const response = await fetch('/api/status');
+
+        if (!response.ok) {
+          throw new Error('Server memberikan response error');
+        }
+
+        const data = await response.json();
+
+        output.textContent = JSON.stringify(data, null, 2);
+        label.textContent = 'Server berjalan';
+
+        dot.className =
+          'h-2.5 w-2.5 rounded-full bg-green-300 motion-safe:animate-pulse';
+
+      } catch (error) {
+
+        output.textContent =
+          'Gagal menghubungi API. Pastikan server masih berjalan.';
+
+        label.textContent = 'Tidak terhubung';
+
+        dot.className =
+          'h-2.5 w-2.5 rounded-full bg-red-400';
+
+      }
+
+    })();
+  </script>
+
+
+  <%- include('partials/footer') %>
+
+</body>
+</html>
