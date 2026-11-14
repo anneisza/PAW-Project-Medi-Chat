@@ -1,4 +1,8 @@
+// config/database.js
+//rev dari repo asli
 const { Pool } = require('pg');
+// Memuat dotenv agar process.env terbaca
+require('dotenv').config(); 
 
 const pool = new Pool({
     host: process.env.DB_HOST || 'localhost',
