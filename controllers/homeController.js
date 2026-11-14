@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 // controllers/homeController.js
+=======
+const { formatRupiah } = require('../utils/format');
+const ProdukModel = require('../models/produkModel');
+>>>>>>> 16f3ac3d1f6ab36df11158ff18993e7173244f86
 const config = require('../config');
 const JadwalModel = require('../models/jadwalModel');
 const BiayaModel = require('../models/biayaModel');
@@ -6,6 +11,7 @@ const PengumumanModel = require('../models/pengumumanModel');
 const prosedur = require('../utils/prosedur');
 const kat = require('../utils/kategori');
 
+<<<<<<< HEAD
 // Terima objek Date maupun string 'YYYY-MM-DD'
 const keDate = (nilai) =>
   nilai instanceof Date
@@ -20,6 +26,23 @@ const tanggalID = (nilai) => {
     month: 'long',
     year: 'numeric',
   });
+=======
+exports.index = async (req, res, next) => {
+  try {
+    const daftarProduk = await ProdukModel.getAll();
+
+    res.render('index', {
+      judul: `${config.appName} - Layanan Chat Medis`,
+      namaToko: config.appName,
+      produk: daftarProduk,
+
+      // Helper format harga untuk EJS
+      formatRupiah: formatRupiah,
+    });
+  } catch (error) {
+    next(error);
+  }
+>>>>>>> 16f3ac3d1f6ab36df11158ff18993e7173244f86
 };
 
 // Kolom NUMERIC dari pg datang sebagai string, jadi dikonversi dulu
