@@ -1,92 +1,51 @@
-CREATE TABLE IF NOT EXISTS produk (
+CREATE TABLE IF NOT EXISTS admins (
+  id            SERIAL PRIMARY KEY,
+  username      VARCHAR(50) UNIQUE NOT NULL,
+  -- ini rev yg pass dan create
+  password_hash VARCHAR(255) NOT NULL,
+  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS jadwal (
+  id           SERIAL PRIMARY KEY,
+  layanan      VARCHAR(100) NOT NULL,
+  dokter       VARCHAR(100) NOT NULL,
+  ruangan      VARCHAR(100) NOT NULL,
+  hari         VARCHAR(50) NOT NULL,  -- Sudah 50 agar aman
+  jam          VARCHAR(50) NOT NULL,
+  status       VARCHAR(20) NOT NULL DEFAULT 'Tersedia'
+    CHECK (status IN ('Tersedia', 'Penuh', 'Libur')),
+  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ini rev tambahan
+CREATE TABLE IF NOT EXISTS biaya (
     id SERIAL PRIMARY KEY,
-    nama VARCHAR(150) NOT NULL,
     kategori VARCHAR(100) NOT NULL,
-    harga INTEGER NOT NULL CHECK (harga >= 0),
-    jadwal VARCHAR(150) NOT NULL,
-    jam VARCHAR(100) NOT NULL,
+    nama VARCHAR(150) NOT NULL,
+    tarif INTEGER NOT NULL CHECK (tarif >= 0),
+    umum INTEGER CHECK (umum >= 0),
+    cito INTEGER CHECK (cito >= 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-INSERT INTO produk (nama, kategori, harga, jadwal, jam)
-SELECT v.nama,
-    v.kategori,
-    v.harga,
-    v.jadwal,
-    v.jam
-FROM (
-        VALUES (
-                'Pemeriksaan Dokter Spesialis',
-                'Rawat Jalan',
-                90000,
-                'Senin - Jumat',
-                '08.00 - 12.00 WIB'
-            ),
-            (
-                'Pemeriksaan Dokter Umum',
-                'Rawat Jalan',
-                73000,
-                'Senin - Jumat',
-                '08.00 - 12.00 WIB'
-            ),
-            (
-                'Pemeriksaan Dokter Gigi',
-                'Rawat Jalan',
-                75000,
-                'Senin - Jumat',
-                '08.00 - 12.00 WIB'
-            ),
-            (
-                'Pemeriksaan Dokter Umum IGD',
-                'IGD',
-                110000,
-                'Sesuai jadwal IGD',
-                'Konfirmasi ke Puskesmas'
-            ),
-            (
-                'Konsultasi Spesialis IGD',
-                'IGD',
-                52000,
-                'Sesuai jadwal IGD',
-                'Konfirmasi ke Puskesmas'
-            ),
-            (
-                'Konsultasi Dokter Spesialis',
-                'Rawat Jalan',
-                90000,
-                'Senin - Jumat',
-                '08.00 - 12.00 WIB'
-            ),
-            (
-                'Konsultasi VCT',
-                'Konsultasi',
-                82000,
-                'Sesuai jadwal layanan',
-                'Konfirmasi ke Puskesmas'
-            ),
-            (
-                'Konseling Narkoba',
-                'Konsultasi',
-                95000,
-                'Sesuai jadwal layanan',
-                'Konfirmasi ke Puskesmas'
-            ),
-            (
-                'Konsultasi Gizi',
-                'Layanan Gizi',
-                22000,
-                'Sesuai jadwal layanan',
-                'Konfirmasi ke Puskesmas'
-            ),
-            (
-                'Asesmen Keperawatan',
-                'Keperawatan',
-                25000,
-                'Sesuai jadwal layanan',
-                'Konfirmasi ke Puskesmas'
-            )
-    ) AS v(nama, kategori, harga, jadwal, jam)
-WHERE NOT EXISTS (
-        SELECT 1
-        FROM produk
-    );
+
+CREATE TABLE IF NOT EXISTS pengumuman (
+    id SERIAL PRIMARY KEY,
+    judul VARCHAR(150) NOT NULL,
+    tanggal DATE NOT NULL,
+    isi TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- Jika dijalankan di DB kosong, admin dibuat.
+-- Jika dijalankan berkali-kali, tidak akan error duplicate.
+INSERT INTO admins (username, password_hash)
+VALUES (
+  'admin',
+  '$2b$10$v7otfWeItzbnYf2AK5UhRef6GtQwypPakr/I2M8Shco7etvCpaxFi'
+)
+ON CONFLICT (username) DO NOTHING;

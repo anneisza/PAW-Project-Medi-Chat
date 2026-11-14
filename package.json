@@ -1,16 +1,23 @@
 {
-  "name": "mvc-express-app",
+  "name": "baru-main",
   "version": "1.0.0",
-  "description": "Contoh Express.js dengan struktur MVC, EJS, dan Tailwind CDN",
+  "description": "Medi-Chat Sistem Informasi Layanan Kesehatan",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "nodemon server.js",
+    "seed": "node database/seed"
   },
   "dependencies": {
-    "dotenv": "^18.0.9",
+    "@google/generative-ai": "^0.21.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
-    "express": "^4.21.2",
-    "pg": "^8.23.1"
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "pg": "^8.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
