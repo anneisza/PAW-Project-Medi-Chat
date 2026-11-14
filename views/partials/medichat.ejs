@@ -1,0 +1,50 @@
+<!-- rev -->
+<%- include('partials/header', { judul: judul, bodyClass: 'body-chat' }) %>
+
+    <section class="page-banner">
+        <h1>Medi-Chat</h1>
+        <p>Asisten chatbot untuk informasi layanan Puskesmas dan kesehatan umum</p>
+    </section>
+
+    <main class="chat-wrapper">
+        <div class="chat-box">
+            <div class="chat-header">
+                <h2>Medi-Chat</h2>
+                <p>Menjawab berdasarkan dokumen layanan Puskesmas</p>
+            </div>
+
+            <div class="chat-messages" id="chat-messages" aria-live="polite">
+                <div class="msg bot">Halo! Ada yang bisa saya bantu seputar layanan kesehatan Puskesmas?</div>
+            </div>
+
+            <div class="chips">
+                <button type="button" class="chip">Bagaimana cara daftar pasien BPJS?</button>
+                <button type="button" class="chip">Berapa biaya rawat jalan?</button>
+                <button type="button" class="chip">Kapan jadwal imunisasi?</button>
+                <button type="button" class="chip">Tips sehat untuk lansia</button>
+            </div>
+
+            <form class="chat-form" id="chat-form" autocomplete="off">
+                <label for="pertanyaan">Pertanyaan Anda</label>
+                <div class="row">
+                    <input type="text" id="pertanyaan" name="pertanyaan" maxlength="500" required placeholder="Ketik pertanyaan...">
+                    <button type="submit" class="btn-konsultasi">Kirim</button>
+                </div>
+            </form>
+        </div>
+        <% if (typeof waAdmin !== 'undefined' && waAdmin) { %>
+            <div style="padding: 0 1.2rem 1.2rem;">
+                <a href="https://wa.me/<%= waAdmin %>?text=Halo%20Admin%20Puskesmas,%20saya%20ingin%20bertanya%20mengenai%20layanan." 
+                   target="_blank" 
+                   class="btn-konsultasi" 
+                   style="display: block; text-align: center; background-color: #24cb62; color: white;">
+                   WhatsApp Admin
+                </a>
+            </div>
+        <% } %>
+        <p class="note">Medi-Chat hanya memberi informasi umum dan bukan pengganti konsultasi dengan dokter. Tidak memberikan diagnosis atau resep. Jika Medi-Chat tidak dapat menjawab, hubungi admin: <%= adminContact %></p>
+        <p class="note"></p>
+    </main>
+
+<%- include('partials/footer') %>
+    <script src="/js/chat.js"></script>

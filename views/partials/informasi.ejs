@@ -1,0 +1,121 @@
+<!-- rev -->
+<%
+  const rp = (v) => (v === null || v === undefined ? '-' : formatRupiah(v));
+%>
+<%- include('partials/header', { judul: judul }) %>
+
+    <section class="page-banner">
+        <h1>Informasi Layanan Puskesmas</h1>
+        <p>Prosedur pendaftaran, jadwal layanan, dan biaya rawat</p>
+    </section>
+
+    <main class="page-content">
+
+        <!-- PROSEDUR PENDAFTARAN -->
+        <section id="pendaftaran" class="info-section">
+            <h2>Prosedur Pendaftaran</h2>
+            <div class="info-grid">
+                <% Object.values(prosedur).forEach(function (p) { %>
+                <article class="info-card">
+                    <h3><%= p.judul %></h3>
+                    <ol>
+                        <% p.langkah.forEach(function (l) { %>
+                        <li><%= l %></li>
+                        <% }); %>
+                    </ol>
+                </article>
+                <% }); %>
+            </div>
+        </section>
+
+        <!-- JADWAL LAYANAN -->
+        <section id="jadwal" class="info-section">
+            <h2>Jadwal Layanan</h2>
+            <% if (jadwal.length) { %>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Layanan</th>
+                            <th>Dokter</th>
+                            <th>Ruangan</th>
+                            <th>Hari</th>
+                            <th>Jam</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% jadwal.forEach(function (j) { %>
+                        <tr>
+                            <td><%= j.layanan %></td>
+                            <td><%= j.dokter %></td>
+                            <td><%= j.ruangan %></td>
+                            <td><%= j.hari %></td>
+                            <td><%= j.jam %></td>
+                            <td><%= j.status %></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <% } else { %>
+            <p class="note">Belum ada jadwal layanan.</p>
+            <% } %>
+            <p class="note">Jadwal dapat berubah.<% if (adminContact) { %> Konfirmasi ke admin: <%= adminContact %><% } %></p>
+        </section>
+
+        <!-- BIAYA RAWAT -->
+        <section id="biaya" class="info-section">
+            <h2>Biaya Rawat</h2>
+            <% kat.SEMUA.forEach(function (k) {
+                 const list = biaya.filter(function (b) { return b.kategori === k; });
+                 if (!list.length) return;
+            %>
+            <h3><%= k %></h3>
+            <div class="table-wrap">
+                <table>
+                    <% if (k === kat.VISITE) { %>
+                    <thead>
+                        <tr>
+                            <th>Kelas Perawatan</th>
+                            <th>dr. Spesialis</th>
+                            <th>dr. Umum</th>
+                            <th>Cito/Libur dr. Spesialis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% list.forEach(function (b) { %>
+                        <tr>
+                            <td><%= b.nama %></td>
+                            <td><%= rp(b.tarif) %></td>
+                            <td><%= rp(b.umum) %></td>
+                            <td><%= rp(b.cito) %></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                    <% } else { %>
+                    <thead>
+                        <tr>
+                            <th><%= k === kat.RJ ? 'Kategori Tindakan' : 'Kelas' %></th>
+                            <th>Tarif</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% list.forEach(function (b) { %>
+                        <tr>
+                            <td><%= b.nama %></td>
+                            <td><%= rp(b.tarif) %></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                    <% } %>
+                </table>
+            </div>
+            <% }); %>
+            <p class="note">Tarif dapat berubah.<% if (adminContact) { %> Konfirmasi ke admin: <%= adminContact %><% } %></p>
+        </section>
+    </main>
+
+<%- include('partials/footer') %>
+</body>
+</html>
