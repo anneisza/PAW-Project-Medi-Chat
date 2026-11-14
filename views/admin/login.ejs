@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Staf - Medi-Chat</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="login-page">
+    <main class="login-wrap">
+        <div class="login-glass">
+            <a href="/" class="brand brand-center">
+                <img class="logo" src="/assets/logo.png" alt="Medi-Chat Logo">
+                <div>
+                    <h4>Medi-Chat</h4>
+                    <p>Sehat pilihan kita</p>
+                </div>
+            </a>
+
+            <h1>Login Staf</h1>
+            <p class="sub">Khusus admin dan petugas Puskesmas</p>
+
+            <form id="login-form" class="form">
+                <label for="user">Username</label>
+                <input type="text" id="user" autocomplete="username" placeholder="Masukkan username" maxlength="50" required>
+
+                <label for="pass">Password</label>
+                <input type="password" id="pass" autocomplete="current-password" placeholder="Masukkan password" maxlength="128" required>
+
+                <p class="error" id="error" role="alert" hidden>Username atau password salah.</p>
+
+                <button type="submit" class="btn">Masuk</button>
+            </form>
+
+            <a href="/" class="back-link">← Kembali ke website</a>
+        </div>
+    </main>
+
+    <script src="/js/login.js"></script>
+</body>
+</html>
