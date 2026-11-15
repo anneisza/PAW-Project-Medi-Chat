@@ -1,4 +1,3 @@
-// controllers/homeController.js
 const config = require('../config');
 const JadwalModel = require('../models/jadwalModel');
 const BiayaModel = require('../models/biayaModel');
@@ -6,7 +5,6 @@ const PengumumanModel = require('../models/pengumumanModel');
 const prosedur = require('../utils/prosedur');
 const kat = require('../utils/kategori');
 
-// Terima objek Date maupun string 'YYYY-MM-DD'
 const keDate = (nilai) =>
   nilai instanceof Date
     ? nilai
@@ -22,7 +20,6 @@ const tanggalID = (nilai) => {
   });
 };
 
-// Kolom NUMERIC dari pg datang sebagai string, jadi dikonversi dulu
 const formatRupiah = (nilai) =>
   new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -33,7 +30,6 @@ const formatRupiah = (nilai) =>
 exports.index = async (req, res, next) => {
   try {
     const semua = await PengumumanModel.getAll();
-    // Terbaru dulu, ambil 3 teratas
     const pengumuman = [...semua]
       .sort((a, b) => keDate(b.tanggal) - keDate(a.tanggal))
       .slice(0, 3)
@@ -62,7 +58,7 @@ exports.informasi = async (req, res, next) => {
       kat,
       formatRupiah,
       adminContact: config.adminContact || '',
-       isAdmin: req.session && req.session.adminId ? true : false,
+      isAdmin: req.session && req.session.adminId ? true : false,
     });
   } catch (error) {
     next(error);
@@ -70,10 +66,11 @@ exports.informasi = async (req, res, next) => {
 };
 
 exports.medichat = (req, res) => {
-  console.log("=== CEK WA ===", process.env.WHATSAPP_ADMIN);
-  res.render('medichat', { 
+  const kontak = config.adminContact || process.env.WHATSAPP_ADMIN || '-';
+  res.render('medichat', {
     judul: `Konsultasi - ${config.appName}`,
     isAdmin: req.session && req.session.adminId ? true : false,
-    waAdmin: process.env.WHATSAPP_ADMIN || '' 
-   });
+    adminContact: kontak,
+    waAdmin: kontak,
+  });
 };
