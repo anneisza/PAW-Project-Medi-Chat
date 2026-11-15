@@ -1,633 +1,94 @@
+<!-- ini rev -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= typeof title !== 'undefined' ? title : 'Dashboard Admin - Medi-Chat' %></title>
-  <link rel="stylesheet" href="/css/admin.css" />
-  <style>
-    :root {
-      --primary: #0f766e;
-      --primary-dark: #115e59;
-      --primary-light: #ccfbf1;
-      --danger: #dc2626;
-      --danger-dark: #b91c1c;
-      --warning: #d97706;
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    .admin-topbar {
-      background: var(--primary);
-      color: #fff;
-      padding: 14px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    }
-
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .topbar-brand img {
-      width: 36px;
-      height: 36px;
-      object-fit: contain;
-      background: #fff;
-      border-radius: 8px;
-      padding: 3px;
-    }
-
-    .topbar-brand h1 {
-      font-size: 1.15rem;
-      font-weight: 700;
-    }
-
-    .topbar-brand span {
-      font-size: 0.8rem;
-      opacity: 0.85;
-      display: block;
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .topbar-link {
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.875rem;
-      padding: 6px 12px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.14);
-      transition: background 0.2s;
-    }
-
-    .topbar-link:hover {
-      background: rgba(255, 255, 255, 0.25);
-    }
-
-    .admin-badge {
-      font-size: 0.875rem;
-      background: rgba(0, 0, 0, 0.18);
-      padding: 6px 12px;
-      border-radius: 20px;
-    }
-
-    .dashboard-container {
-      max-width: 1200px;
-      margin: 24px auto;
-      padding: 0 16px 40px;
-    }
-
-    .alert-box {
-      display: none;
-      padding: 12px 16px;
-      border-radius: 8px;
-      margin-bottom: 18px;
-      font-size: 0.925rem;
-      font-weight: 500;
-    }
-
-    .alert-box.show {
-      display: block;
-    }
-
-    .alert-success {
-      background: #dcfce7;
-      color: #166534;
-      border: 1px solid #86efac;
-    }
-
-    .alert-error {
-      background: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #fca5a5;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 20px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    }
-
-    .stat-card .stat-label {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-
-    .stat-card .stat-value {
-      font-size: 1.65rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .tabs-nav {
-      display: flex;
-      gap: 8px;
-      border-bottom: 2px solid var(--border);
-      margin-bottom: 20px;
-      overflow-x: auto;
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: none;
-      padding: 10px 18px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--muted);
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-
-    .tab-btn:hover {
-      color: var(--primary);
-    }
-
-    .tab-btn.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-    }
-
-    .tab-panel {
-      display: none;
-    }
-
-    .tab-panel.active {
-      display: block;
-    }
-
-    .panel-grid {
-      display: grid;
-      grid-template-columns: 360px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
-
-    @media (max-width: 920px) {
-      .panel-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    }
-
-    .card-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text);
-    }
-
-    .form-group {
-      margin-bottom: 13px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 5px;
-      color: var(--text);
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 9px 11px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-family: inherit;
-      background: #fff;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
-    }
-
-    .form-hint {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 16px;
-    }
-
-    .btn {
-      padding: 9px 15px;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, opacity 0.2s;
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background: var(--primary-dark);
-    }
-
-    .btn-secondary {
-      background: #e2e8f0;
-      color: #334155;
-    }
-
-    .btn-secondary:hover:not(:disabled) {
-      background: #cbd5e1;
-    }
-
-    .btn-danger {
-      background: var(--danger);
-      color: #fff;
-    }
-
-    .btn-danger:hover:not(:disabled) {
-      background: var(--danger-dark);
-    }
-
-    .btn-warning {
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fcd34d;
-    }
-
-    .btn-warning:hover:not(:disabled) {
-      background: #fde68a;
-    }
-
-    .btn-sm {
-      padding: 5px 10px;
-      font-size: 0.8rem;
-    }
-
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-
-    th {
-      background: #f8fafc;
-      font-weight: 700;
-      color: #334155;
-      white-space: nowrap;
-    }
-
-    tr:hover td {
-      background: #f8fafc;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 3px 9px;
-      border-radius: 12px;
-      font-size: 0.78rem;
-      font-weight: 600;
-    }
-
-    .badge-open {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .badge-warning {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .badge-closed {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .action-group {
-      display: flex;
-      gap: 6px;
-      white-space: nowrap;
-    }
-
-    .empty-row {
-      text-align: center;
-      color: var(--muted);
-      padding: 24px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Medi-Chat</title>
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
-<body>
-  <header class="admin-topbar">
-    <div class="topbar-brand">
-      <img src="/assets/logo.png" alt="Logo Medi-Chat" onerror="this.style.display='none'" />
-      <div>
-        <h1>Medi-Chat Admin Panel</h1>
-        <span>Kelola Jadwal Layanan, Biaya & Pengumuman Puskesmas</span>
-      </div>
+<body class="dashboard">
+    <div class="admin-layout">
+
+        <!-- SIDEBAR (desktop) / BAR MENU BAWAH (mobile) -->
+        <aside class="sidebar">
+            <a href="/" class="brand">
+                <img class="logo" src="/assets/logo.png" alt="Medi-Chat Logo">
+                <div>
+                    <h4>Medi-Chat</h4>
+                    <p>Panel Admin</p>
+                </div>
+            </a>
+
+            <nav class="side-menu">
+                <button type="button" class="tab active" data-tab="jadwal" title="Jadwal Layanan">
+                    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span class="lbl">Jadwal Layanan</span>
+                </button>
+
+                <button type="button" class="tab" data-tab="biaya" title="Biaya Pengobatan">
+                    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></span><span class="lbl">Biaya Pengobatan</span>
+                </button>
+
+                <button type="button" class="tab" data-tab="pengumuman" title="Informasi Puskesmas">
+                    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg></span><span class="lbl">Informasi Puskesmas</span>
+                </button>
+            </nav>
+
+            <div class="side-foot">
+                <a href="/">Lihat Website</a>
+                <button type="button" class="js-logout">Keluar</button>
+            </div>
+        </aside>
+
+        <!-- KONTEN -->
+        <main class="admin-main">
+
+            <!-- Top bar (hanya tampil di mobile) -->
+            <div class="m-top">
+                <a href="/" class="m-icon" aria-label="Lihat website">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v10a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1z"/></svg>
+                </a>
+                <span class="m-title">Dashboard</span>
+                <button type="button" class="m-icon js-logout" aria-label="Keluar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                </button>
+            </div>
+
+            <div class="admin-top">
+                <div>
+                    <h1 id="judul"></h1>
+                    <p id="deskripsi"></p>
+                </div>
+                <button type="button" class="btn" id="btn-tambah" aria-label="Tambah data">+ Tambah Data</button>
+            </div>
+
+            <section class="stats" id="stats"></section>
+
+            <section class="panel">
+                <div class="table-wrap">
+                    <table>
+                        <thead id="thead"></thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+                <p class="empty" id="empty" hidden>Belum ada data. Klik "Tambah Data".</p>
+            </section>
+        </main>
     </div>
-    <div class="topbar-actions">
-      <a href="/" class="topbar-link" target="_blank">Beranda</a>
-      <a href="/informasi" class="topbar-link" target="_blank">Halaman Informasi</a>
-      <a href="/medichat" class="topbar-link" target="_blank">Cek Chatbot</a>
-      <span class="admin-badge">Halo, <strong id="adminUsername"><%= (admin && admin.username) ? admin.username : 'Admin' %></strong></span>
-      <button type="button" id="btnLogout" class="btn btn-danger btn-sm">Logout</button>
-    </div>
-  </header>
 
-  <main class="dashboard-container">
-    <div id="alertBox" class="alert-box" role="alert"></div>
-
-    <section class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">Total Jadwal Layanan</div>
-        <div class="stat-value" id="countJadwal">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Total Item Biaya</div>
-        <div class="stat-value" id="countBiaya">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Total Pengumuman</div>
-        <div class="stat-value" id="countPengumuman">0</div>
-      </div>
-    </section>
-
-    <nav class="tabs-nav" aria-label="Kategori Data Admin">
-      <button type="button" class="tab-btn active" data-tab="jadwal">Jadwal Layanan</button>
-      <button type="button" class="tab-btn" data-tab="biaya">Biaya Layanan</button>
-      <button type="button" class="tab-btn" data-tab="pengumuman">Pengumuman</button>
-    </nav>
-
-    <section id="panel-jadwal" class="tab-panel active">
-      <div class="panel-grid">
-        <div class="card">
-          <h2 class="card-title" id="jadwalFormTitle">Tambah Jadwal Layanan</h2>
-          <form id="formJadwal">
-            <input type="hidden" id="jadwalId" />
-
-            <div class="form-group">
-              <label for="jadwalLayanan">Nama Layanan / Poli *</label>
-              <input type="text" id="jadwalLayanan" maxlength="100" placeholder="Contoh: Poli Umum" required />
+    <!-- FORM TAMBAH / UBAH -->
+    <dialog id="dlg">
+        <form id="form" class="dlg-form">
+            <h2 id="dlg-title"></h2>
+            <div id="fields"></div>
+            <p class="error" id="form-error" role="alert" hidden></p>
+            <div class="dlg-actions">
+                <button type="button" class="btn btn-outline" id="batal">Batal</button>
+                <button type="submit" class="btn" id="simpan">Simpan</button>
             </div>
+        </form>
+    </dialog>
 
-            <div class="form-group">
-              <label for="jadwalDokter">Nama Dokter / Petugas *</label>
-              <input type="text" id="jadwalDokter" maxlength="100" placeholder="Contoh: dr. Siti Aminah" required />
-            </div>
-
-            <div class="form-group">
-              <label for="jadwalRuangan">Ruangan *</label>
-              <input type="text" id="jadwalRuangan" maxlength="100" placeholder="Contoh: Ruang Poli 1" required />
-            </div>
-
-            <div class="form-group">
-              <label for="jadwalHari">Hari Layanan *</label>
-              <input type="text" id="jadwalHari" maxlength="50" placeholder="Contoh: Senin - Jumat" required />
-            </div>
-
-            <div class="form-group">
-              <label for="jadwalJam">Jam Layanan *</label>
-              <input type="text" id="jadwalJam" maxlength="50" placeholder="Contoh: 08.00 - 14.00" required />
-              <div class="form-hint">Gunakan format jam buka - tutup (misal: 08.00 - 14.00 atau 08:00 - 14:00).</div>
-            </div>
-
-            <div class="form-group">
-              <label for="jadwalStatus">Status *</label>
-              <select id="jadwalStatus" required>
-                <option value="Tersedia">Tersedia</option>
-                <option value="Penuh">Penuh</option>
-                <option value="Libur">Libur</option>
-              </select>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" id="btnSubmitJadwal" class="btn btn-primary">Simpan Jadwal</button>
-              <button type="button" id="btnResetJadwal" class="btn btn-secondary">Batal / Reset</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2 class="card-title">Daftar Jadwal Layanan</h2>
-          <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Layanan</th>
-                  <th>Dokter</th>
-                  <th>Ruangan</th>
-                  <th>Hari</th>
-                  <th>Jam</th>
-                  <th>Status</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyJadwal">
-                <tr><td colspan="8" class="empty-row">Memuat data jadwal...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="panel-biaya" class="tab-panel">
-      <div class="panel-grid">
-        <div class="card">
-          <h2 class="card-title" id="biayaFormTitle">Tambah Biaya Layanan</h2>
-          <form id="formBiaya">
-            <input type="hidden" id="biayaId" />
-
-            <div class="form-group">
-              <label for="biayaKategori">Kategori Biaya *</label>
-              <select id="biayaKategori" required>
-                <option value="Pemeriksaan & Konsultasi Rawat Jalan">Pemeriksaan & Konsultasi Rawat Jalan</option>
-                <option value="Visite & Konsultasi Rawat Inap">Visite & Konsultasi Rawat Inap</option>
-                <option value="Akomodasi Rawat Inap">Akomodasi Rawat Inap</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="biayaNama">Nama Tindakan / Layanan *</label>
-              <input type="text" id="biayaNama" placeholder="Contoh: Pemeriksaan Umum / Visite Dokter" required />
-            </div>
-
-            <div class="form-group">
-              <label for="biayaTarif">Tarif Standar (Rp)</label>
-              <input type="number" id="biayaTarif" min="0" step="500" placeholder="Contoh: 15000" />
-            </div>
-
-            <div class="form-group">
-              <label for="biayaUmum">Tarif Umum (Rp)</label>
-              <input type="number" id="biayaUmum" min="0" step="500" placeholder="Khusus Visite Rawat Inap (opsional)" />
-            </div>
-
-            <div class="form-group">
-              <label for="biayaCito">Tarif Cito (Rp)</label>
-              <input type="number" id="biayaCito" min="0" step="500" placeholder="Khusus Visite Rawat Inap (opsional)" />
-              <div class="form-hint" id="biayaHint">Untuk Rawat Jalan & Akomodasi isi Tarif Standar. Untuk kategori Visite isi Tarif Umum & Cito.</div>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" id="btnSubmitBiaya" class="btn btn-primary">Simpan Biaya</button>
-              <button type="button" id="btnResetBiaya" class="btn btn-secondary">Batal / Reset</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2 class="card-title">Daftar Biaya Layanan</h2>
-          <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Kategori</th>
-                  <th>Nama Layanan</th>
-                  <th>Tarif</th>
-                  <th>Umum</th>
-                  <th>Cito</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyBiaya">
-                <tr><td colspan="7" class="empty-row">Memuat data biaya...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="panel-pengumuman" class="tab-panel">
-      <div class="panel-grid">
-        <div class="card">
-          <h2 class="card-title" id="pengumumanFormTitle">Tambah Pengumuman</h2>
-          <form id="formPengumuman">
-            <input type="hidden" id="pengumumanId" />
-
-            <div class="form-group">
-              <label for="pengumumanJudul">Judul Pengumuman *</label>
-              <input type="text" id="pengumumanJudul" placeholder="Contoh: Jadwal Imunisasi Bulan Ini" required />
-            </div>
-
-            <div class="form-group">
-              <label for="pengumumanTanggal">Tanggal *</label>
-              <input type="date" id="pengumumanTanggal" required />
-            </div>
-
-            <div class="form-group">
-              <label for="pengumumanIsi">Isi Pengumuman *</label>
-              <textarea id="pengumumanIsi" rows="5" placeholder="Tuliskan detail informasi pengumuman..." required></textarea>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" id="btnSubmitPengumuman" class="btn btn-primary">Simpan Pengumuman</button>
-              <button type="button" id="btnResetPengumuman" class="btn btn-secondary">Batal / Reset</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2 class="card-title">Daftar Pengumuman</h2>
-          <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tanggal</th>
-                  <th>Judul</th>
-                  <th>Isi</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyPengumuman">
-                <tr><td colspan="5" class="empty-row">Memuat data pengumuman...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script src="/js/admin.js"></script>
+    <script src="/js/admin.js"></script>
 </body>
 </html>
