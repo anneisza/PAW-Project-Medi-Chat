@@ -66,11 +66,13 @@ exports.informasi = async (req, res, next) => {
 };
 
 exports.medichat = (req, res) => {
-  const kontak = config.adminContact || process.env.WHATSAPP_ADMIN || '-';
+  const rawWa = String(process.env.WHATSAPP_ADMIN || '6280320240303').replace(/\D/g, '');
+  const waAdmin = rawWa.startsWith('0') ? `62${rawWa.slice(1)}` : rawWa;
+
   res.render('medichat', {
     judul: `Konsultasi - ${config.appName}`,
     isAdmin: req.session && req.session.adminId ? true : false,
-    adminContact: kontak,
-    waAdmin: kontak,
+    adminContact: config.adminContact || '',
+    waAdmin,
   });
 };
